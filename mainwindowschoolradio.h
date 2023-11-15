@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QThread>
+#include <QTimer>
 
 bool ProcessStart(const QString &Command, QString *pResult, int msecs);
 
@@ -47,6 +48,7 @@ private:
     int m_intModuleLoopback = -1;
     QAudioRecorder *m_pAudioRecorder = nullptr;
     WorkerThread *m_pWorkerThread = nullptr;
+    QTimer *m_pTimer = nullptr;
 
     bool LoadModule(const QString &module, int *num);
     void UnloadModule(int num);
@@ -59,6 +61,7 @@ private:
     void ProcessStartAsync(const QString &Command, int msecs);
 
 private slots:
+    void updateTime();
     void on_DurationChanged(qint64 duration);
     void on_pushButtonRecording_clicked();
     void on_horizontalSliderRecording_valueChanged(int value);

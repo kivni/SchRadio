@@ -96,8 +96,21 @@ MainWindowSchoolRadio::~MainWindowSchoolRadio()
         m_pAudioRecorder = nullptr;
     }
 
+    if (m_pTimer != nullptr)
+    {
+        delete m_pTimer;
+
+        m_pTimer = nullptr;
+    }
+
     if (m_pWorkerThread != nullptr)
     {
+        if (m_pWorkerThread->isRunning())
+        {
+            m_pWorkerThread->terminate();
+            m_pWorkerThread->wait();
+        }
+
         delete  m_pWorkerThread;
         m_pWorkerThread = nullptr;
     }
@@ -243,12 +256,45 @@ void MainWindowSchoolRadio::RecordingOff()
 
 void MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)
 {
+    qDebug() << "MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)";
+
+    QObjectList widgetList = children();
+
+    for(auto *widget : this->findChildren<QWidget *>())
+    {
+        widget->setEnabled(false);
+    }
+
     if (m_pWorkerThread == nullptr)
     {
         m_pWorkerThread = new WorkerThread();
     }
 
     m_pWorkerThread->ProcessStart(Command, msecs);
+
+    if (m_pTimer == nullptr)
+    {
+        m_pTimer = new QTimer(this);
+
+        connect(m_pTimer, &QTimer::timeout, this, &MainWindowSchoolRadio::updateTime);
+    }
+
+    m_pTimer->start(1000);
+}
+
+void MainWindowSchoolRadio::updateTime()
+{
+    qDebug() << "MainWindowSchoolRadio::updateTime()";
+
+    if (m_pWorkerThread != nullptr && !m_pWorkerThread->isRunning())
+    {
+        m_pTimer->stop();
+
+        for(auto *widget : this->findChildren<QWidget *>())
+        {
+            widget->setEnabled(true);
+        }
+    }
 }
 
 void MainWindowSchoolRadio::on_DurationChanged(qint64 duration)
@@ -302,8 +348,6 @@ void MainWindowSchoolRadio::on_horizontalSliderRecording_valueChanged(int value)
 void MainWindowSchoolRadio::on_pushButtonPlay_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlay_clicked()";
-
-    m_ui->pushButtonPlay->setEnabled(false);
 
     ProcessStartAsync(QString("vlc --play-and-exit ") + GetRecordingFileName(), -1);
 }
