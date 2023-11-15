@@ -9,6 +9,23 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QDebug>
+#include <QThread>
+
+bool ProcessStart(const QString &Command, QString *pResult, int msecs);
+
+class WorkerThread : public QThread
+{
+    Q_OBJECT
+
+    void run() override;
+
+public:
+    void ProcessStart(const QString &Command, int msecs);
+
+private:
+    QString m_Command;
+    int m_msecs;
+};
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowSchoolRadio; }
@@ -29,8 +46,8 @@ private:
     int m_intModuleRtpSend = -1;
     int m_intModuleLoopback = -1;
     QAudioRecorder *m_pAudioRecorder = nullptr;
+    WorkerThread *m_pWorkerThread = nullptr;
 
-    bool ProcessStart(const QString &Command, QString *pResult, int msecs);
     bool LoadModule(const QString &module, int *num);
     void UnloadModule(int num);
     bool TranslationOn();
@@ -39,7 +56,7 @@ private:
     void MicrophoneOff();
     bool RecordingOn();
     void RecordingOff();
-    void gui_update();
+    void ProcessStartAsync(const QString &Command, int msecs);
 
 private slots:
     void on_DurationChanged(qint64 duration);

@@ -9,6 +9,60 @@ QString GetRecordingFileName()
     return c_SchRadioFolder + c_SchRadioFile;
 }
 
+bool ProcessStart(const QString &Command, QString *pResult, int msecs)
+{
+    qDebug() << "ProcessStart(const QString &Command, QString *pResult)";
+    qDebug() << "Command = " << Command;
+
+    QProcess Process;
+
+    Process.start(Command);
+
+    if (Process.waitForFinished(msecs))
+    {
+        QString Result = Process.readAllStandardOutput();
+
+        if (Result.length() > 0)
+        {
+            Result = Result.trimmed();
+
+            if (pResult != nullptr)
+            {
+                *pResult = Result;
+
+                qDebug() << "Result = " << Result;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
+// WorkerThread
+
+void WorkerThread::ProcessStart(const QString &Command, int msecs)
+{
+    qDebug() << "WorkerThread::ProcessStart(const QString &Command, int msecs)";
+    qDebug() << "Command = " << Command;
+
+    m_Command = Command;
+    m_msecs = msecs;
+
+    start();
+}
+
+void WorkerThread::run()
+{
+    qDebug() << "WorkerThread::run()";
+
+    ::ProcessStart(m_Command, nullptr, m_msecs);
+}
+
+
+// MainWindowSchoolRadio
 
 MainWindowSchoolRadio::MainWindowSchoolRadio(QWidget *parent)
     : QMainWindow(parent)
@@ -42,41 +96,16 @@ MainWindowSchoolRadio::~MainWindowSchoolRadio()
         m_pAudioRecorder = nullptr;
     }
 
+    if (m_pWorkerThread != nullptr)
+    {
+        delete  m_pWorkerThread;
+        m_pWorkerThread = nullptr;
+    }
+
     QSettings configIniWrite("SchoolRadio.ini", QSettings::IniFormat);
     configIniWrite.setValue("horizontalSliderRecording", m_ui->horizontalSliderRecording->value());
 
     delete m_ui;
-}
-
-bool MainWindowSchoolRadio::ProcessStart(const QString &Command, QString *pResult, int msecs)
-{
-    qDebug() << "MainWindowSchoolRadio::ProcessStart(const QString &Command, QString *pResult)";
-    qDebug() << "Command = " << Command;
-
-    QProcess Process;
-
-    Process.start(Command);
-
-    if (Process.waitForFinished(msecs))
-    {
-        QString Result = Process.readAllStandardOutput();
-
-        if (Result.length() > 0)
-        {
-            Result = Result.trimmed();
-
-            if (pResult != nullptr)
-            {
-                *pResult = Result;
-
-                qDebug() << "Result = " << Result;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
 }
 
 bool MainWindowSchoolRadio::LoadModule(const QString &Module, int *pNum)
@@ -212,6 +241,16 @@ void MainWindowSchoolRadio::RecordingOff()
     }
 }
 
+void MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)
+{
+    if (m_pWorkerThread == nullptr)
+    {
+        m_pWorkerThread = new WorkerThread();
+    }
+
+    m_pWorkerThread->ProcessStart(Command, msecs);
+}
+
 void MainWindowSchoolRadio::on_DurationChanged(qint64 duration)
 {
     qDebug() << "MainWindowSchoolRadio::on_DurationChanged(qint64 duration)";
@@ -264,14 +303,18 @@ void MainWindowSchoolRadio::on_pushButtonPlay_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlay_clicked()";
 
-    ProcessStart(QString("vlc --play-and-exit ") + GetRecordingFileName(), nullptr, -1);
+    m_ui->pushButtonPlay->setEnabled(false);
+
+    ProcessStartAsync(QString("vlc --play-and-exit ") + GetRecordingFileName(), -1);
 }
 
 void MainWindowSchoolRadio::on_pushButtonPlayList_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlayList_clicked()";
 
-    ProcessStart(QString("vlc ") + "--play-and-exit " + c_SchRadioFolder + "SchoolRadio.xspf", nullptr, -1);
+    m_ui->pushButtonPlayList->setEnabled(false);
+
+    ProcessStartAsync(QString("vlc ") + "--play-and-exit " + c_SchRadioFolder + "SchoolRadio.xspf", -1);
 }
 
 void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()
