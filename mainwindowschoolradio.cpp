@@ -279,7 +279,7 @@ void MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)
         connect(m_pTimer, &QTimer::timeout, this, &MainWindowSchoolRadio::updateTime);
     }
 
-    m_pTimer->start(1000);
+    m_pTimer->start(300);
 }
 
 void MainWindowSchoolRadio::updateTime()
