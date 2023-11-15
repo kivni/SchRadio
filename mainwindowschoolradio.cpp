@@ -16,7 +16,7 @@ bool ProcessStart(const QString &Command, QString *pResult, int msecs)
 
     QProcess Process;
 
-    Process.start(Command);
+Process.start(Command);
 
     if (Process.waitForFinished(msecs))
     {
