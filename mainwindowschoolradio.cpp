@@ -2,6 +2,7 @@
 #include "ui_mainwindowschoolradio.h"
 
 const QString c_SchRadioFile = "02-объявление.wav";
+const QString c_PlayListName = "pl.xspf";
 
 bool ProcessStart(const QString &Command, QString *pResult, int msecs)
 {
@@ -248,16 +249,19 @@ void MainWindowSchoolRadio::RecordingOff()
     }
 }
 
+void MainWindowSchoolRadio::WidgetEnabled(bool b)
+{
+    for(auto *widget : this->findChildren<QWidget *>())
+    {
+        widget->setEnabled(b);
+    }
+}
+
 void MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)
 {
     qDebug() << "MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)";
 
     QObjectList widgetList = children();
-
-    for(auto *widget : this->findChildren<QWidget *>())
-    {
-        widget->setEnabled(false);
-    }
 
     if (m_pWorkerThread == nullptr)
     {
@@ -284,10 +288,7 @@ void MainWindowSchoolRadio::updateTime()
     {
         m_pTimer->stop();
 
-        for(auto *widget : this->findChildren<QWidget *>())
-        {
-            widget->setEnabled(true);
-        }
+        WidgetEnabled(true);
     }
 }
 
@@ -343,6 +344,8 @@ void MainWindowSchoolRadio::on_pushButtonPlay_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlay_clicked()";
 
+    WidgetEnabled(false);
+
     ProcessStartAsync(QString("vlc --play-and-exit ") + GetRecordingFileName(), -1);
 }
 
@@ -350,9 +353,26 @@ void MainWindowSchoolRadio::on_pushButtonPlayList_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlayList_clicked()";
 
-    m_ui->pushButtonPlayList->setEnabled(false);
+    WidgetEnabled(false);
 
-    ProcessStartAsync(QString("vlc ") + "--play-and-exit " + m_ui->lineEditDir->text() + "/SchoolRadio.xspf", -1);
+    if (!QFile::exists(m_ui->lineEditDir->text() + "/" + c_PlayListName))
+    {
+        QMessageBox msgBox;
+        msgBox.setText(QString("Отсутствует список воспроизведения в папке ") + m_ui->lineEditDir->text());
+        msgBox.setInformativeText("Добавьте звуковые файлы в список воспроизведения и сохраните его под именем " + c_PlayListName);
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setDefaultButton(QMessageBox::Close);
+        msgBox.exec();
+
+        ProcessStart(QString("vlc ") + m_ui->lineEditDir->text(), nullptr, -1);
+
+        WidgetEnabled(true);
+
+        return;
+    }
+
+    ProcessStartAsync(QString("vlc ") + "--play-and-exit " + m_ui->lineEditDir->text() + "/" + c_PlayListName, -1);
 }
 
 void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()

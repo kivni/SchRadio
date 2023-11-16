@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QTimer>
+#include <QMessageBox>
 
 bool ProcessStart(const QString &Command, QString *pResult, int msecs);
 
@@ -60,6 +61,7 @@ private:
     bool RecordingOn();
     void RecordingOff();
     void ProcessStartAsync(const QString &Command, int msecs);
+    void WidgetEnabled(bool b);
 
 private slots:
     void updateTime();
