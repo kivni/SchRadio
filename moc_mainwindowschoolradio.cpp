@@ -87,8 +87,8 @@ int WorkerThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 struct qt_meta_stringdata_MainWindowSchoolRadio_t {
-    QByteArrayData data[13];
-    char stringdata0[270];
+    QByteArrayData data[14];
+    char stringdata0[295];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -109,7 +109,8 @@ QT_MOC_LITERAL(8, 141, 25), // "on_pushButtonPlay_clicked"
 QT_MOC_LITERAL(9, 167, 29), // "on_pushButtonPlayList_clicked"
 QT_MOC_LITERAL(10, 197, 32), // "on_pushButtonTranslation_clicked"
 QT_MOC_LITERAL(11, 230, 34), // "on_checkBoxMicrophone_stateCh..."
-QT_MOC_LITERAL(12, 265, 4) // "arg1"
+QT_MOC_LITERAL(12, 265, 4), // "arg1"
+QT_MOC_LITERAL(13, 270, 24) // "on_toolButtonDir_clicked"
 
     },
     "MainWindowSchoolRadio\0updateTime\0\0"
@@ -120,7 +121,7 @@ QT_MOC_LITERAL(12, 265, 4) // "arg1"
     "on_pushButtonPlayList_clicked\0"
     "on_pushButtonTranslation_clicked\0"
     "on_checkBoxMicrophone_stateChanged\0"
-    "arg1"
+    "arg1\0on_toolButtonDir_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -130,7 +131,7 @@ static const uint qt_meta_data_MainWindowSchoolRadio[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -138,14 +139,15 @@ static const uint qt_meta_data_MainWindowSchoolRadio[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x08 /* Private */,
-       3,    1,   55,    2, 0x08 /* Private */,
-       5,    0,   58,    2, 0x08 /* Private */,
-       6,    1,   59,    2, 0x08 /* Private */,
-       8,    0,   62,    2, 0x08 /* Private */,
-       9,    0,   63,    2, 0x08 /* Private */,
-      10,    0,   64,    2, 0x08 /* Private */,
-      11,    1,   65,    2, 0x08 /* Private */,
+       1,    0,   59,    2, 0x08 /* Private */,
+       3,    1,   60,    2, 0x08 /* Private */,
+       5,    0,   63,    2, 0x08 /* Private */,
+       6,    1,   64,    2, 0x08 /* Private */,
+       8,    0,   67,    2, 0x08 /* Private */,
+       9,    0,   68,    2, 0x08 /* Private */,
+      10,    0,   69,    2, 0x08 /* Private */,
+      11,    1,   70,    2, 0x08 /* Private */,
+      13,    0,   73,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -156,6 +158,7 @@ static const uint qt_meta_data_MainWindowSchoolRadio[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   12,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -174,6 +177,7 @@ void MainWindowSchoolRadio::qt_static_metacall(QObject *_o, QMetaObject::Call _c
         case 5: _t->on_pushButtonPlayList_clicked(); break;
         case 6: _t->on_pushButtonTranslation_clicked(); break;
         case 7: _t->on_checkBoxMicrophone_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->on_toolButtonDir_clicked(); break;
         default: ;
         }
     }
@@ -204,13 +208,13 @@ int MainWindowSchoolRadio::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

@@ -17,9 +17,11 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -41,18 +43,21 @@ public:
     QFrame *frameListen;
     QPushButton *pushButtonPlay;
     QPushButton *pushButtonPlayList;
+    QLineEdit *lineEditDir;
+    QLabel *labelAudio;
+    QToolButton *toolButtonDir;
 
     void setupUi(QMainWindow *MainWindowSchoolRadio)
     {
         if (MainWindowSchoolRadio->objectName().isEmpty())
             MainWindowSchoolRadio->setObjectName(QStringLiteral("MainWindowSchoolRadio"));
-        MainWindowSchoolRadio->resize(640, 600);
-        MainWindowSchoolRadio->setMinimumSize(QSize(640, 600));
+        MainWindowSchoolRadio->resize(640, 670);
+        MainWindowSchoolRadio->setMinimumSize(QSize(640, 670));
         centralwidget = new QWidget(MainWindowSchoolRadio);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         frameTranslattion = new QFrame(centralwidget);
         frameTranslattion->setObjectName(QStringLiteral("frameTranslattion"));
-        frameTranslattion->setGeometry(QRect(10, 400, 621, 180));
+        frameTranslattion->setGeometry(QRect(10, 470, 621, 180));
         frameTranslattion->setFrameShape(QFrame::Panel);
         frameTranslattion->setFrameShadow(QFrame::Sunken);
         checkBoxMicrophone = new QCheckBox(frameTranslattion);
@@ -74,7 +79,7 @@ public:
         pushButtonTranslation->setCheckable(true);
         frameRecording = new QFrame(centralwidget);
         frameRecording->setObjectName(QStringLiteral("frameRecording"));
-        frameRecording->setGeometry(QRect(10, 10, 621, 211));
+        frameRecording->setGeometry(QRect(10, 80, 621, 211));
         QFont font2;
         font2.setBold(false);
         font2.setWeight(50);
@@ -110,7 +115,7 @@ public:
         TextLabelRecordingDuration->setGeometry(QRect(190, 170, 101, 20));
         frameListen = new QFrame(centralwidget);
         frameListen->setObjectName(QStringLiteral("frameListen"));
-        frameListen->setGeometry(QRect(10, 240, 621, 141));
+        frameListen->setGeometry(QRect(10, 310, 621, 141));
         frameListen->setFrameShape(QFrame::Panel);
         frameListen->setFrameShadow(QFrame::Sunken);
         pushButtonPlay = new QPushButton(frameListen);
@@ -123,6 +128,16 @@ public:
         pushButtonPlayList->setGeometry(QRect(260, 20, 341, 101));
         pushButtonPlayList->setFont(font1);
         pushButtonPlayList->setFocusPolicy(Qt::NoFocus);
+        lineEditDir = new QLineEdit(centralwidget);
+        lineEditDir->setObjectName(QStringLiteral("lineEditDir"));
+        lineEditDir->setGeometry(QRect(92, 20, 481, 40));
+        lineEditDir->setReadOnly(true);
+        labelAudio = new QLabel(centralwidget);
+        labelAudio->setObjectName(QStringLiteral("labelAudio"));
+        labelAudio->setGeometry(QRect(20, 20, 71, 40));
+        toolButtonDir = new QToolButton(centralwidget);
+        toolButtonDir->setObjectName(QStringLiteral("toolButtonDir"));
+        toolButtonDir->setGeometry(QRect(580, 20, 41, 42));
         MainWindowSchoolRadio->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindowSchoolRadio);
@@ -144,6 +159,8 @@ public:
 "\320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
         pushButtonPlayList->setText(QApplication::translate("MainWindowSchoolRadio", "\320\237\321\200\320\276\321\201\320\273\321\203\321\210\320\260\321\202\321\214\n"
 "\321\201\320\277\320\270\321\201\320\276\320\272", nullptr));
+        labelAudio->setText(QApplication::translate("MainWindowSchoolRadio", "\320\237\320\260\320\277\320\272\320\260:", nullptr));
+        toolButtonDir->setText(QApplication::translate("MainWindowSchoolRadio", "...", nullptr));
     } // retranslateUi
 
 };

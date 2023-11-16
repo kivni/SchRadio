@@ -1,13 +1,7 @@
 #include "mainwindowschoolradio.h"
 #include "ui_mainwindowschoolradio.h"
 
-const QString c_SchRadioFolder = "//home/sa/Desktop/SchoolRadio/";
 const QString c_SchRadioFile = "02-объявление.wav";
-
-QString GetRecordingFileName()
-{
-    return c_SchRadioFolder + c_SchRadioFile;
-}
 
 bool ProcessStart(const QString &Command, QString *pResult, int msecs)
 {
@@ -77,17 +71,28 @@ MainWindowSchoolRadio::MainWindowSchoolRadio(QWidget *parent)
     pMainWindowWidget->setWindowFlags(windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowMaximizeButtonHint);
 
     QSettings configIniWrite("SchoolRadio.ini", QSettings::IniFormat);
+    move(configIniWrite.value("pos", QPoint(200, 200)).toPoint());
     m_ui->horizontalSliderRecording->setValue(configIniWrite.value("horizontalSliderRecording", 25).toInt());
+    m_ui->lineEditDir->setText(configIniWrite.value("lineEditDir", "").toString());
 
     m_ui->TextLabelRecordingDuration->setText("");
     on_horizontalSliderRecording_valueChanged(m_ui->horizontalSliderRecording->value());
+
+    if (m_ui->lineEditDir->text() == "")
+    {
+        on_toolButtonDir_clicked();
+    }
 }
 
 MainWindowSchoolRadio::~MainWindowSchoolRadio()
 {
     TranslationOff();
-
     RecordingOff();
+
+    QSettings configIniWrite("SchoolRadio.ini", QSettings::IniFormat);
+    configIniWrite.setValue("pos", pos());
+    configIniWrite.setValue("horizontalSliderRecording", m_ui->horizontalSliderRecording->value());
+    configIniWrite.setValue("lineEditDir", m_ui->lineEditDir->text());
 
     if (m_pAudioRecorder != nullptr)
     {
@@ -115,10 +120,12 @@ MainWindowSchoolRadio::~MainWindowSchoolRadio()
         m_pWorkerThread = nullptr;
     }
 
-    QSettings configIniWrite("SchoolRadio.ini", QSettings::IniFormat);
-    configIniWrite.setValue("horizontalSliderRecording", m_ui->horizontalSliderRecording->value());
-
     delete m_ui;
+}
+
+QString MainWindowSchoolRadio::GetRecordingFileName()
+{
+    return m_ui->lineEditDir->text() + "/" + c_SchRadioFile;
 }
 
 bool MainWindowSchoolRadio::LoadModule(const QString &Module, int *pNum)
@@ -204,19 +211,6 @@ void MainWindowSchoolRadio::MicrophoneOff()
 bool MainWindowSchoolRadio::RecordingOn()
 {
     qDebug() << "MainWindowSchoolRadio::RecordingOn()";
-
-    if (QFile::exists(GetRecordingFileName()) && !QFile::remove(GetRecordingFileName()))
-    {
-        QMessageBox msgBox;
-        msgBox.setText(QString("Невозможно удалить файл: ") + GetRecordingFileName());
-        msgBox.setInformativeText("Попробуйте закрыть все приложения и удалить файл вручную.");
-        msgBox.setStandardButtons(QMessageBox::Close);
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.setDefaultButton(QMessageBox::Close);
-        msgBox.exec();
-
-        return false;
-    }
 
     if (m_pAudioRecorder == nullptr)
     {
@@ -358,7 +352,7 @@ void MainWindowSchoolRadio::on_pushButtonPlayList_clicked()
 
     m_ui->pushButtonPlayList->setEnabled(false);
 
-    ProcessStartAsync(QString("vlc ") + "--play-and-exit " + c_SchRadioFolder + "SchoolRadio.xspf", -1);
+    ProcessStartAsync(QString("vlc ") + "--play-and-exit " + m_ui->lineEditDir->text() + "/SchoolRadio.xspf", -1);
 }
 
 void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()
@@ -400,5 +394,20 @@ void MainWindowSchoolRadio::on_checkBoxMicrophone_stateChanged(int arg1)
     else
     {
         MicrophoneOff();
+    }
+}
+
+void MainWindowSchoolRadio::on_toolButtonDir_clicked()
+{
+    while (true)
+    {
+        QString filename= QFileDialog::getExistingDirectory(this, "Выберете папку с аудио");
+
+        if (filename != "")
+        {
+            m_ui->lineEditDir->setText(filename);
+
+            break;
+        }
     }
 }

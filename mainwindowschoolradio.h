@@ -6,7 +6,7 @@
 #include <QAudioRecorder>
 #include <QUrl>
 #include <QFile>
-#include <QMessageBox>
+#include <QFileDialog>
 #include <QSettings>
 #include <QDebug>
 #include <QThread>
@@ -50,6 +50,7 @@ private:
     WorkerThread *m_pWorkerThread = nullptr;
     QTimer *m_pTimer = nullptr;
 
+    QString GetRecordingFileName();
     bool LoadModule(const QString &module, int *num);
     void UnloadModule(int num);
     bool TranslationOn();
@@ -69,5 +70,6 @@ private slots:
     void on_pushButtonPlayList_clicked();
     void on_pushButtonTranslation_clicked();
     void on_checkBoxMicrophone_stateChanged(int arg1);
+    void on_toolButtonDir_clicked();
 };
 #endif // MAINWINDOWSCHOOLRADIO_H
