@@ -2,11 +2,10 @@
 
 #include <QApplication>
 #include <QLockFile>
-#include <QDir>
 
 int main(int argc, char *argv[])
 {
-    QLockFile lockFile(QDir::temp().absoluteFilePath("lurity.lock"));
+    QLockFile lockFile(QDir::temp().absoluteFilePath("SchRadio.lock"));
 
     if (!lockFile.tryLock(100))
     {
