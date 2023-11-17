@@ -111,7 +111,7 @@ MainWindowSchoolRadio::MainWindowSchoolRadio(QWidget *parent)
     m_ui->TextLabelRecordingDuration->setText("");
     on_horizontalSliderRecording_valueChanged(m_ui->horizontalSliderRecording->value());
 
-    if (m_ui->lineEditDir->text() == "")
+    if (GetRecordingDir() == "")
     {
         on_toolButtonDir_clicked();
     }
@@ -125,7 +125,7 @@ MainWindowSchoolRadio::~MainWindowSchoolRadio()
     QSettings configIniWrite("SchoolRadio.ini", QSettings::IniFormat);
     configIniWrite.setValue("pos", pos());
     configIniWrite.setValue("horizontalSliderRecording", m_ui->horizontalSliderRecording->value());
-    configIniWrite.setValue("lineEditDir", m_ui->lineEditDir->text());
+    configIniWrite.setValue("lineEditDir", GetRecordingDir());
 
     if (m_pAudioRecorder != nullptr)
     {
@@ -156,9 +156,14 @@ MainWindowSchoolRadio::~MainWindowSchoolRadio()
     delete m_ui;
 }
 
+QString MainWindowSchoolRadio::GetRecordingDir()
+{
+    return m_ui->lineEditDir->text();
+}
+
 QString MainWindowSchoolRadio::GetRecordingFileName()
 {
-    return m_ui->lineEditDir->text() + "/" + c_SchRadioFile;
+    return GetRecordingDir() + "/" + c_SchRadioFile;
 }
 
 bool MainWindowSchoolRadio::TranslationOn()
@@ -346,6 +351,13 @@ void MainWindowSchoolRadio::on_pushButtonPlay_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlay_clicked()";
 
+    if (!QFile::exists(GetRecordingFileName()))
+    {
+        QMessageBox::warning(this, "Внимание", "Нет файла объявления:\n" + GetRecordingFileName());
+
+        return;
+    }
+
     WidgetEnabled(false);
 
     ProcessStartAsync(QString("vlc --play-and-exit \"") + GetRecordingFileName() + "\"", -1);
@@ -355,9 +367,16 @@ void MainWindowSchoolRadio::on_pushButtonPlayDir_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlayList_clicked()";
 
+    if(QDir(GetRecordingDir()).entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries).count() == 0)
+    {
+        QMessageBox::warning(this, "Внимание", "Нет файлов в папке:\n" + GetRecordingDir());
+
+        return;
+    }
+
     WidgetEnabled(false);
 
-    ProcessStartAsync(QString("vlc ") + "--play-and-exit \"" + m_ui->lineEditDir->text() + "\"", -1);
+    ProcessStartAsync(QString("vlc ") + "--play-and-exit \"" + GetRecordingDir() + "\"", -1);
 }
 
 void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()

@@ -51,6 +51,7 @@ private:
     ProcessStartThread *m_pWorkerThread = nullptr;
     QTimer *m_pTimer = nullptr;
 
+    QString GetRecordingDir();
     QString GetRecordingFileName();
     bool TranslationOn();
     void TranslationOff();
