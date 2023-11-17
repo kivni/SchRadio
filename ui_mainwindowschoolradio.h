@@ -42,7 +42,7 @@ public:
     QLabel *TextLabelRecordingDuration;
     QFrame *frameListen;
     QPushButton *pushButtonPlay;
-    QPushButton *pushButtonPlayList;
+    QPushButton *pushButtonPlayDir;
     QLineEdit *lineEditDir;
     QLabel *labelAudio;
     QToolButton *toolButtonDir;
@@ -131,11 +131,11 @@ public:
         pushButtonPlay->setGeometry(QRect(10, 10, 161, 61));
         pushButtonPlay->setFont(font1);
         pushButtonPlay->setFocusPolicy(Qt::NoFocus);
-        pushButtonPlayList = new QPushButton(frameListen);
-        pushButtonPlayList->setObjectName(QStringLiteral("pushButtonPlayList"));
-        pushButtonPlayList->setGeometry(QRect(180, 10, 271, 61));
-        pushButtonPlayList->setFont(font1);
-        pushButtonPlayList->setFocusPolicy(Qt::NoFocus);
+        pushButtonPlayDir = new QPushButton(frameListen);
+        pushButtonPlayDir->setObjectName(QStringLiteral("pushButtonPlayDir"));
+        pushButtonPlayDir->setGeometry(QRect(180, 10, 271, 61));
+        pushButtonPlayDir->setFont(font1);
+        pushButtonPlayDir->setFocusPolicy(Qt::NoFocus);
         lineEditDir = new QLineEdit(centralwidget);
         lineEditDir->setObjectName(QStringLiteral("lineEditDir"));
         lineEditDir->setGeometry(QRect(92, 10, 321, 40));
@@ -161,15 +161,15 @@ public:
         MainWindowSchoolRadio->setWindowTitle(QApplication::translate("MainWindowSchoolRadio", "\320\250\320\272\320\276\320\273\321\214\320\275\320\276\320\265 \321\200\320\260\320\264\320\270\320\276", nullptr));
         checkBoxMicrophone->setText(QApplication::translate("MainWindowSchoolRadio", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214 \320\274\320\270\320\272\321\200\320\276\321\204\320\276\320\275", nullptr));
         pushButtonTranslation->setText(QApplication::translate("MainWindowSchoolRadio", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214 \321\202\321\200\320\260\320\275\321\201\320\273\321\217\321\206\320\270\321\216", nullptr));
-        pushButtonRecording->setText(QApplication::translate("MainWindowSchoolRadio", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214 \320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
+        pushButtonRecording->setText(QApplication::translate("MainWindowSchoolRadio", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214 \320\276\320\261\321\212\321\217\320\262\320\273\320\265\320\275\320\270\320\265", nullptr));
         label->setText(QApplication::translate("MainWindowSchoolRadio", "\320\243\321\200\320\276\320\262\320\265\320\275\321\214 \320\267\320\260\320\277\320\270\321\201\320\270:", nullptr));
         TextLabelRecordingLevel->setText(QApplication::translate("MainWindowSchoolRadio", "100%", nullptr));
         TextLabelRecording->setText(QApplication::translate("MainWindowSchoolRadio", "\320\222\321\200\320\265\320\274\321\217 \320\267\320\260\320\277\320\270\321\201\320\270:", nullptr));
         TextLabelRecordingDuration->setText(QApplication::translate("MainWindowSchoolRadio", "123", nullptr));
         pushButtonPlay->setText(QApplication::translate("MainWindowSchoolRadio", "\320\237\321\200\320\276\321\201\320\273\321\203\321\210\320\260\321\202\321\214\n"
 "\320\267\320\260\320\277\320\270\321\201\321\214", nullptr));
-        pushButtonPlayList->setText(QApplication::translate("MainWindowSchoolRadio", "\320\237\321\200\320\276\321\201\320\273\321\203\321\210\320\260\321\202\321\214\n"
-"\321\201\320\277\320\270\321\201\320\276\320\272", nullptr));
+        pushButtonPlayDir->setText(QApplication::translate("MainWindowSchoolRadio", "\320\237\321\200\320\276\321\201\320\273\321\203\321\210\320\260\321\202\321\214\n"
+"\320\277\320\260\320\277\320\272\321\203", nullptr));
         labelAudio->setText(QApplication::translate("MainWindowSchoolRadio", "\320\237\320\260\320\277\320\272\320\260:", nullptr));
         toolButtonDir->setText(QApplication::translate("MainWindowSchoolRadio", "...", nullptr));
     } // retranslateUi

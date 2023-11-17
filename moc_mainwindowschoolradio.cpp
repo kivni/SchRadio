@@ -20,25 +20,25 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_WorkerThread_t {
+struct qt_meta_stringdata_ProcessStartThread_t {
     QByteArrayData data[1];
-    char stringdata0[13];
+    char stringdata0[19];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_WorkerThread_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_ProcessStartThread_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_WorkerThread_t qt_meta_stringdata_WorkerThread = {
+static const qt_meta_stringdata_ProcessStartThread_t qt_meta_stringdata_ProcessStartThread = {
     {
-QT_MOC_LITERAL(0, 0, 12) // "WorkerThread"
+QT_MOC_LITERAL(0, 0, 18) // "ProcessStartThread"
 
     },
-    "WorkerThread"
+    "ProcessStartThread"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_WorkerThread[] = {
+static const uint qt_meta_data_ProcessStartThread[] = {
 
  // content:
        7,       // revision
@@ -54,7 +54,7 @@ static const uint qt_meta_data_WorkerThread[] = {
        0        // eod
 };
 
-void WorkerThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void ProcessStartThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -62,33 +62,33 @@ void WorkerThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject WorkerThread::staticMetaObject = {
-    { &QThread::staticMetaObject, qt_meta_stringdata_WorkerThread.data,
-      qt_meta_data_WorkerThread,  qt_static_metacall, nullptr, nullptr}
+QT_INIT_METAOBJECT const QMetaObject ProcessStartThread::staticMetaObject = {
+    { &QThread::staticMetaObject, qt_meta_stringdata_ProcessStartThread.data,
+      qt_meta_data_ProcessStartThread,  qt_static_metacall, nullptr, nullptr}
 };
 
 
-const QMetaObject *WorkerThread::metaObject() const
+const QMetaObject *ProcessStartThread::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *WorkerThread::qt_metacast(const char *_clname)
+void *ProcessStartThread::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_WorkerThread.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_ProcessStartThread.stringdata0))
         return static_cast<void*>(this);
     return QThread::qt_metacast(_clname);
 }
 
-int WorkerThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int ProcessStartThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QThread::qt_metacall(_c, _id, _a);
     return _id;
 }
 struct qt_meta_stringdata_MainWindowSchoolRadio_t {
     QByteArrayData data[14];
-    char stringdata0[295];
+    char stringdata0[294];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -106,11 +106,11 @@ QT_MOC_LITERAL(5, 62, 30), // "on_pushButtonRecording_clicked"
 QT_MOC_LITERAL(6, 93, 41), // "on_horizontalSliderRecording_..."
 QT_MOC_LITERAL(7, 135, 5), // "value"
 QT_MOC_LITERAL(8, 141, 25), // "on_pushButtonPlay_clicked"
-QT_MOC_LITERAL(9, 167, 29), // "on_pushButtonPlayList_clicked"
-QT_MOC_LITERAL(10, 197, 32), // "on_pushButtonTranslation_clicked"
-QT_MOC_LITERAL(11, 230, 34), // "on_checkBoxMicrophone_stateCh..."
-QT_MOC_LITERAL(12, 265, 4), // "arg1"
-QT_MOC_LITERAL(13, 270, 24) // "on_toolButtonDir_clicked"
+QT_MOC_LITERAL(9, 167, 28), // "on_pushButtonPlayDir_clicked"
+QT_MOC_LITERAL(10, 196, 32), // "on_pushButtonTranslation_clicked"
+QT_MOC_LITERAL(11, 229, 34), // "on_checkBoxMicrophone_stateCh..."
+QT_MOC_LITERAL(12, 264, 4), // "arg1"
+QT_MOC_LITERAL(13, 269, 24) // "on_toolButtonDir_clicked"
 
     },
     "MainWindowSchoolRadio\0updateTime\0\0"
@@ -118,7 +118,7 @@ QT_MOC_LITERAL(13, 270, 24) // "on_toolButtonDir_clicked"
     "on_pushButtonRecording_clicked\0"
     "on_horizontalSliderRecording_valueChanged\0"
     "value\0on_pushButtonPlay_clicked\0"
-    "on_pushButtonPlayList_clicked\0"
+    "on_pushButtonPlayDir_clicked\0"
     "on_pushButtonTranslation_clicked\0"
     "on_checkBoxMicrophone_stateChanged\0"
     "arg1\0on_toolButtonDir_clicked"
@@ -174,7 +174,7 @@ void MainWindowSchoolRadio::qt_static_metacall(QObject *_o, QMetaObject::Call _c
         case 2: _t->on_pushButtonRecording_clicked(); break;
         case 3: _t->on_horizontalSliderRecording_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 4: _t->on_pushButtonPlay_clicked(); break;
-        case 5: _t->on_pushButtonPlayList_clicked(); break;
+        case 5: _t->on_pushButtonPlayDir_clicked(); break;
         case 6: _t->on_pushButtonTranslation_clicked(); break;
         case 7: _t->on_checkBoxMicrophone_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 8: _t->on_toolButtonDir_clicked(); break;

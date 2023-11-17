@@ -136,7 +136,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Включить запись</string>
+      <string>Записать объявление</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -286,7 +286,7 @@
 запись</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButtonPlayList">
+    <widget class="QPushButton" name="pushButtonPlayDir">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -307,7 +307,7 @@
      </property>
      <property name="text">
       <string>Прослушать
-список</string>
+папку</string>
      </property>
     </widget>
    </widget>

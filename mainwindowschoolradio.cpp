@@ -1,8 +1,10 @@
 #include "mainwindowschoolradio.h"
 #include "ui_mainwindowschoolradio.h"
 
+
+// Global
+
 const QString c_SchRadioFile = "02-объявление.wav";
-const QString c_PlayListName = "pl.xspf";
 
 bool ProcessStart(const QString &Command, QString *pResult, int msecs)
 {
@@ -11,7 +13,7 @@ bool ProcessStart(const QString &Command, QString *pResult, int msecs)
 
     QProcess Process;
 
-Process.start(Command);
+    Process.start(Command);
 
     if (Process.waitForFinished(msecs))
     {
@@ -35,10 +37,40 @@ Process.start(Command);
     return false;
 }
 
+bool LoadModule(const QString &Module, int *pNum)
+{
+    qDebug() << "LoadModule(const QString &Module, int *pNum)";
 
-// WorkerThread
+    QString Result;
 
-void WorkerThread::ProcessStart(const QString &Command, int msecs)
+    if (ProcessStart("pactl load-module " + Module, &Result, 3000))
+    {
+        QRegExp re("\\d*");
+
+        if (pNum != nullptr && re.exactMatch(Result))
+        {
+            *pNum = Result.toInt();
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void UnloadModule(int Num)
+{
+    qDebug() << "UnloadModule(int Num)";
+
+    QString Result;
+
+    ProcessStart("pactl unload-module " + QString::number(Num), &Result, 3000);
+}
+
+
+// ProcessStartThread
+
+void ProcessStartThread::ProcessStart(const QString &Command, int msecs)
 {
     qDebug() << "WorkerThread::ProcessStart(const QString &Command, int msecs)";
     qDebug() << "Command = " << Command;
@@ -49,7 +81,7 @@ void WorkerThread::ProcessStart(const QString &Command, int msecs)
     start();
 }
 
-void WorkerThread::run()
+void ProcessStartThread::run()
 {
     qDebug() << "WorkerThread::run()";
 
@@ -127,36 +159,6 @@ MainWindowSchoolRadio::~MainWindowSchoolRadio()
 QString MainWindowSchoolRadio::GetRecordingFileName()
 {
     return m_ui->lineEditDir->text() + "/" + c_SchRadioFile;
-}
-
-bool MainWindowSchoolRadio::LoadModule(const QString &Module, int *pNum)
-{
-    qDebug() << "MainWindowSchoolRadio::LoadModule(const QString &Module, int *pNum)";
-
-    QString Result;
-
-    if (ProcessStart("pactl load-module " + Module, &Result, 3000))
-    {
-        QRegExp re("\\d*");
-
-        if (pNum != nullptr && re.exactMatch(Result))
-        {
-            *pNum = Result.toInt();
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void MainWindowSchoolRadio::UnloadModule(int Num)
-{
-    qDebug() << "MainWindowSchoolRadio::UnloadModule(int Num)";
-
-    QString Result;
-
-    ProcessStart("pactl unload-module " + QString::number(Num), &Result, 3000);
 }
 
 bool MainWindowSchoolRadio::TranslationOn()
@@ -265,7 +267,7 @@ void MainWindowSchoolRadio::ProcessStartAsync(const QString &Command, int msecs)
 
     if (m_pWorkerThread == nullptr)
     {
-        m_pWorkerThread = new WorkerThread();
+        m_pWorkerThread = new ProcessStartThread();
     }
 
     m_pWorkerThread->ProcessStart(Command, msecs);
@@ -316,7 +318,7 @@ void MainWindowSchoolRadio::on_pushButtonRecording_clicked()
             m_ui->horizontalSliderRecording->setEnabled(false);
             m_ui->pushButtonTranslation->setEnabled(false);
             m_ui->pushButtonPlay->setEnabled(false);
-            m_ui->pushButtonPlayList->setEnabled(false);
+            m_ui->pushButtonPlayDir->setEnabled(false);
         }
     }
     else
@@ -324,12 +326,12 @@ void MainWindowSchoolRadio::on_pushButtonRecording_clicked()
         RecordingOff();
 
         m_ui->pushButtonRecording->setStyleSheet(QString("background-color: ") + QString::number(QWidget::palette().color(QWidget::backgroundRole()).value()));
-        m_ui->pushButtonRecording->setText("Включить запись");
+        m_ui->pushButtonRecording->setText("Записать объявление");
 
         m_ui->horizontalSliderRecording->setEnabled(true);
         m_ui->pushButtonTranslation->setEnabled(true);
         m_ui->pushButtonPlay->setEnabled(true);
-        m_ui->pushButtonPlayList->setEnabled(true);
+        m_ui->pushButtonPlayDir->setEnabled(true);
     }
 }
 
@@ -346,33 +348,16 @@ void MainWindowSchoolRadio::on_pushButtonPlay_clicked()
 
     WidgetEnabled(false);
 
-    ProcessStartAsync(QString("vlc --play-and-exit ") + GetRecordingFileName(), -1);
+    ProcessStartAsync(QString("vlc --play-and-exit \"") + GetRecordingFileName() + "\"", -1);
 }
 
-void MainWindowSchoolRadio::on_pushButtonPlayList_clicked()
+void MainWindowSchoolRadio::on_pushButtonPlayDir_clicked()
 {
     qDebug() << "MainWindowSchoolRadio::on_pushButtonPlayList_clicked()";
 
     WidgetEnabled(false);
 
-    if (!QFile::exists(m_ui->lineEditDir->text() + "/" + c_PlayListName))
-    {
-        QMessageBox msgBox;
-        msgBox.setText(QString("Отсутствует список воспроизведения в папке ") + m_ui->lineEditDir->text());
-        msgBox.setInformativeText("Добавьте звуковые файлы в список воспроизведения и сохраните его под именем " + c_PlayListName);
-        msgBox.setStandardButtons(QMessageBox::Close);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setDefaultButton(QMessageBox::Close);
-        msgBox.exec();
-
-        ProcessStart(QString("vlc ") + m_ui->lineEditDir->text(), nullptr, -1);
-
-        WidgetEnabled(true);
-
-        return;
-    }
-
-    ProcessStartAsync(QString("vlc ") + "--play-and-exit " + m_ui->lineEditDir->text() + "/" + c_PlayListName, -1);
+    ProcessStartAsync(QString("vlc ") + "--play-and-exit \"" + m_ui->lineEditDir->text() + "\"", -1);
 }
 
 void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()
@@ -419,15 +404,12 @@ void MainWindowSchoolRadio::on_checkBoxMicrophone_stateChanged(int arg1)
 
 void MainWindowSchoolRadio::on_toolButtonDir_clicked()
 {
-    while (true)
+    QString filename= QFileDialog::getExistingDirectory(this, "Выберете папку с аудиофайлами");
+
+    if (filename == "")
     {
-        QString filename= QFileDialog::getExistingDirectory(this, "Выберете папку с аудио");
-
-        if (filename != "")
-        {
-            m_ui->lineEditDir->setText(filename);
-
-            break;
-        }
+        filename = QDir::currentPath();
     }
+
+    m_ui->lineEditDir->setText(filename);
 }
