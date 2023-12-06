@@ -100,7 +100,8 @@ MainWindowSchoolRadio::MainWindowSchoolRadio(QWidget *parent)
     m_ui->setupUi(this);
 
     QWidget* pMainWindowWidget = (QWidget*) this;
-    pMainWindowWidget ->setMaximumSize(pMainWindowWidget ->minimumSize());
+    pMainWindowWidget->setMinimumSize(pMainWindowWidget->size());
+    pMainWindowWidget ->setMaximumSize(pMainWindowWidget ->size());
     pMainWindowWidget->setWindowFlags(windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowMaximizeButtonHint);
 
     QSettings configIniWrite("SchoolRadio.ini", QSettings::IniFormat);
@@ -231,19 +232,22 @@ bool MainWindowSchoolRadio::RecordingOn()
         AudioEncoderSettings.setQuality(QMultimedia::NormalQuality);
         AudioEncoderSettings.setSampleRate(44100);
         AudioEncoderSettings.setChannelCount(2);
-
         m_pAudioRecorder->setAudioSettings(AudioEncoderSettings);
-        m_pAudioRecorder->setContainerFormat("audio/x-wav");
 
+        m_pAudioRecorder->setContainerFormat("audio/x-wav");
         m_pAudioRecorder->setAudioInput(m_pAudioRecorder->defaultAudioInput());
-        m_pAudioRecorder->setOutputLocation(QUrl::fromLocalFile(GetRecordingFileName()));
     }
 
     ProcessStart("pactl set-source-volume @DEFAULT_SOURCE@ " + QString::number((65536 / 100) * m_ui->horizontalSliderRecording->value()), nullptr, 100);
 
-    m_pAudioRecorder->record();
+    if (m_pAudioRecorder->setOutputLocation(QUrl(GetRecordingFileName()).path()))
+    {
+        m_pAudioRecorder->record();
 
-    return true;
+        return true;
+    }
+
+    return false;
 }
 
 void MainWindowSchoolRadio::RecordingOff()
@@ -391,7 +395,6 @@ void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()
             m_ui->pushButtonTranslation->setText("Выключить трансляцию");
 
             m_ui->pushButtonRecording->setEnabled(false);
-            m_ui->checkBoxMicrophone->setEnabled(true);
         }
     }
     else
@@ -402,7 +405,6 @@ void MainWindowSchoolRadio::on_pushButtonTranslation_clicked()
         m_ui->pushButtonTranslation->setText("Включить трансляцию");
 
         m_ui->pushButtonRecording->setEnabled(true);
-        m_ui->checkBoxMicrophone->setEnabled(false);
         m_ui->checkBoxMicrophone->setChecked(false);
     }
 }

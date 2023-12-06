@@ -51,13 +51,13 @@ public:
     {
         if (MainWindowSchoolRadio->objectName().isEmpty())
             MainWindowSchoolRadio->setObjectName(QStringLiteral("MainWindowSchoolRadio"));
-        MainWindowSchoolRadio->resize(481, 440);
-        MainWindowSchoolRadio->setMinimumSize(QSize(480, 440));
+        MainWindowSchoolRadio->resize(481, 453);
+        MainWindowSchoolRadio->setMinimumSize(QSize(0, 0));
         centralwidget = new QWidget(MainWindowSchoolRadio);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         frameTranslattion = new QFrame(centralwidget);
         frameTranslattion->setObjectName(QStringLiteral("frameTranslattion"));
-        frameTranslattion->setGeometry(QRect(10, 320, 461, 111));
+        frameTranslattion->setGeometry(QRect(10, 320, 461, 121));
         QFont font;
         font.setPointSize(10);
         frameTranslattion->setFont(font);
@@ -65,8 +65,8 @@ public:
         frameTranslattion->setFrameShadow(QFrame::Sunken);
         checkBoxMicrophone = new QCheckBox(frameTranslattion);
         checkBoxMicrophone->setObjectName(QStringLiteral("checkBoxMicrophone"));
-        checkBoxMicrophone->setEnabled(false);
-        checkBoxMicrophone->setGeometry(QRect(10, 80, 251, 30));
+        checkBoxMicrophone->setEnabled(true);
+        checkBoxMicrophone->setGeometry(QRect(10, 80, 231, 30));
         checkBoxMicrophone->setFont(font);
         pushButtonTranslation = new QPushButton(frameTranslattion);
         pushButtonTranslation->setObjectName(QStringLiteral("pushButtonTranslation"));
@@ -76,7 +76,6 @@ public:
         font1.setBold(true);
         font1.setWeight(75);
         pushButtonTranslation->setFont(font1);
-        pushButtonTranslation->setFocusPolicy(Qt::NoFocus);
         pushButtonTranslation->setCheckable(true);
         frameRecording = new QFrame(centralwidget);
         frameRecording->setObjectName(QStringLiteral("frameRecording"));
@@ -93,7 +92,6 @@ public:
         pushButtonRecording->setObjectName(QStringLiteral("pushButtonRecording"));
         pushButtonRecording->setGeometry(QRect(10, 40, 441, 61));
         pushButtonRecording->setFont(font1);
-        pushButtonRecording->setFocusPolicy(Qt::NoFocus);
         pushButtonRecording->setAutoFillBackground(false);
         pushButtonRecording->setCheckable(true);
         pushButtonRecording->setFlat(false);
@@ -130,16 +128,15 @@ public:
         pushButtonPlay->setObjectName(QStringLiteral("pushButtonPlay"));
         pushButtonPlay->setGeometry(QRect(10, 10, 161, 61));
         pushButtonPlay->setFont(font1);
-        pushButtonPlay->setFocusPolicy(Qt::NoFocus);
         pushButtonPlayDir = new QPushButton(frameListen);
         pushButtonPlayDir->setObjectName(QStringLiteral("pushButtonPlayDir"));
         pushButtonPlayDir->setGeometry(QRect(180, 10, 271, 61));
         pushButtonPlayDir->setFont(font1);
-        pushButtonPlayDir->setFocusPolicy(Qt::NoFocus);
         lineEditDir = new QLineEdit(centralwidget);
         lineEditDir->setObjectName(QStringLiteral("lineEditDir"));
         lineEditDir->setGeometry(QRect(92, 10, 321, 40));
         lineEditDir->setFont(font);
+        lineEditDir->setAcceptDrops(false);
         lineEditDir->setReadOnly(true);
         labelAudio = new QLabel(centralwidget);
         labelAudio->setObjectName(QStringLiteral("labelAudio"));
@@ -149,7 +146,15 @@ public:
         toolButtonDir->setObjectName(QStringLiteral("toolButtonDir"));
         toolButtonDir->setGeometry(QRect(420, 10, 41, 42));
         toolButtonDir->setFont(font);
+        toolButtonDir->setFocusPolicy(Qt::StrongFocus);
         MainWindowSchoolRadio->setCentralWidget(centralwidget);
+        QWidget::setTabOrder(lineEditDir, toolButtonDir);
+        QWidget::setTabOrder(toolButtonDir, horizontalSliderRecording);
+        QWidget::setTabOrder(horizontalSliderRecording, pushButtonRecording);
+        QWidget::setTabOrder(pushButtonRecording, pushButtonPlay);
+        QWidget::setTabOrder(pushButtonPlay, pushButtonPlayDir);
+        QWidget::setTabOrder(pushButtonPlayDir, pushButtonTranslation);
+        QWidget::setTabOrder(pushButtonTranslation, checkBoxMicrophone);
 
         retranslateUi(MainWindowSchoolRadio);
 
